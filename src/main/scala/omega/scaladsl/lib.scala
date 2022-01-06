@@ -40,7 +40,7 @@ private class SessionImpl(p: Pointer, i: OmegaFFI) extends Session {
   }
 
   def viewCb(offset: Long, size: Long, cb: ViewportCallback): Viewport = {
-    val vp = i.omega_edit_create_viewport(p, offset, size, (v) => println(s"[${v.data()} ${v.length}]"), null)
+    val vp = i.omega_edit_create_viewport(p, offset, size, cb, null)
     new ViewportImpl(vp, i)
   }
 }

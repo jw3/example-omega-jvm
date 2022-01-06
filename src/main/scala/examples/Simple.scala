@@ -5,7 +5,7 @@ import omega.scaladsl.lib.{omega => OmegaLib}
 object Simple extends App {
   val s = OmegaLib.newSession()
 
-  s.viewCb(0, 1000, (_) => println("BOOM"))
+  s.viewCb(0, 1000, (v) => println(s"[${v.data()} ${v.length}]"))
 
   val hello = s.view(0, 5)
   val world = s.view(6, 10)
