@@ -1,5 +1,6 @@
 package omega.scaladsl
 
+import jnr.ffi.annotations.Delegate
 import jnr.ffi.{LibraryLoader, Pointer}
 import omega.scaladsl.api.{Omega, Session, Viewport}
 
@@ -12,7 +13,7 @@ private trait OmegaFFI extends Omega {
   def omega_edit_insert(p: Pointer, offset: Long, str: String, len: Long): Long
   def omega_edit_overwrite(p: Pointer, offset: Long, str: String, len: Long): Long
   def omega_edit_delete(p: Pointer, offset: Long, len: Long): Long
-  def omega_edit_create_viewport(p: Pointer, offset: Long, size: Long, cb: Pointer, userData: Pointer): Pointer
+  def omega_edit_create_viewport(p: Pointer, offset: Long, size: Long, cb: ViewportCallback, userData: Pointer): Pointer
 
   def omega_viewport_get_length(p: Pointer): Long
   def omega_viewport_get_data(p: Pointer): String
@@ -37,6 +38,11 @@ private class SessionImpl(p: Pointer, i: OmegaFFI) extends Session {
     val vp = i.omega_edit_create_viewport(p, offset, size, null, null)
     new ViewportImpl(vp, i)
   }
+
+  def viewCb(offset: Long, size: Long, cb: ViewportCallback): Viewport = {
+    val vp = i.omega_edit_create_viewport(p, offset, size, (v) => println(s"[${v.data()} ${v.length}]"), null)
+    new ViewportImpl(vp, i)
+  }
 }
 
 private class ViewportImpl(p: Pointer, i: OmegaFFI) extends Viewport {
@@ -47,4 +53,11 @@ private class ViewportImpl(p: Pointer, i: OmegaFFI) extends Viewport {
     i.omega_viewport_get_length(p)
 
   override def toString: String = data()
+}
+
+trait ViewportCallback {
+  @Delegate def invoke(p: Pointer, change: Pointer): Unit =
+    handle(new ViewportImpl(p, lib.omega.asInstanceOf[OmegaFFI]))
+
+  def handle(v: Viewport): Unit
 }
