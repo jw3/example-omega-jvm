@@ -1,5 +1,7 @@
-JVM Omega Edit Examples
+Omega Edit Examples from the JVM
 ===
+
+Uses [JNR-FFI](https://github.com/jnr/jnr-ffi) for good 
 
 ```scala
 import omega.scaladsl.lib.{omega => OmegaLib}
