@@ -9,7 +9,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.32",
   "com.typesafe.akka" %% "akka-http" % "10.2.7",
   "com.typesafe.akka" %% "akka-stream" % "2.5.32",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.2.7"
+  "com.typesafe.akka" %% "akka-http-spray-json" % "10.2.7",
+  "io.github.paoloboni" %% "spray-json-derived-codecs" % "2.3.5"
 )
 
 scalacOptions ++= Seq(
@@ -21,5 +22,5 @@ scalacOptions ++= Seq(
   "-language:postfixOps",
   "-language:implicitConversions",
   "-Xfatal-warnings",
-  "-Xlint:_,-eta-sam"
+  "-Xlint:_,-byname-implicit"
 )
