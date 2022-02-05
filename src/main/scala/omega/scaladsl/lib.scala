@@ -25,6 +25,8 @@ private trait OmegaFFI extends Omega {
 }
 
 private class SessionImpl(p: Pointer, i: OmegaFFI) extends Session {
+  var callbacks = List.empty[ViewportCallback]
+
   def push(s: String): Unit =
     i.omega_edit_insert(p, 0, s, 0)
 
@@ -40,6 +42,7 @@ private class SessionImpl(p: Pointer, i: OmegaFFI) extends Session {
   }
 
   def viewCb(offset: Long, size: Long, cb: ViewportCallback): Viewport = {
+    callbacks +:= cb
     val vp = i.omega_edit_create_viewport(p, offset, size, cb, null)
     new ViewportImpl(vp, i)
   }
